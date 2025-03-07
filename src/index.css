@@ -1,0 +1,48 @@
+.container {
+  padding: 16px;
+  background-color: #333; /* Qoramtir rang */
+}
+
+.title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.card {
+  background-color: #424242; /* To'q kulrang */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  height: 80px; /* Barcha kartalar bir xil balandlikda */
+}
+
+@media (max-width: 768px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card:nth-child(odd) {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  .card:nth-child(even) {
+    width: 100%;
+  }
+}
