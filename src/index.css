@@ -1,63 +1,84 @@
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  touch-action: manipulation; 
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html,
-body{
+html, body {
+height: 100%;
+margin: 0;
+/* overflow: hidden; */
+}
 
+body {
+background-color: #1a1a1a;
+color: white;
+padding: 10px;
+flex-direction: column;
+box-sizing: border-box;
+zoom: 75%;
+}
+
+
+h1 {
+  text-align: center;
+  padding: 15px 0;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.category-card {
   background-color: #333;
-}
-.container {
-  padding: 16px;
-  background-color: #333; /* Qoramtir rang */
-}
-
-.title {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 16px;
-  font-size: 14px;
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-.card {
-  background-color: #424242; /* To'q kulrang */
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  height: 80px; /* Barcha kartalar bir xil balandlikda */
+  padding: 15px;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  grid-column: span 1;
 }
 
-@media (max-width: 768px) {
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+.category-card.long {
+  grid-column: span 2;
+}
 
-  .card:nth-child(odd) {
-    width: 70%;
-    margin: 0 auto;
-  }
+.category-card.special {
+  background-color: #d64231;
+}
 
-  .card:nth-child(even) {
-    width: 100%;
-  }
+.category-name {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.category-count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.logo-container {
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.logo-container img {
+  max-width: 100%;
+  max-height: 100%;
 }
