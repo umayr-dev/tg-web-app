@@ -5,15 +5,15 @@ import { useParams } from "react-router-dom";
 const ProductPage = () => {
   const { categoryId } = useParams();
   const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`https://kroff-api.eduflow.uz/api/v1/products?=${categoryId}&page=${currentPage}`)
+      .get(`https://kroff-api.eduflow.uz/api/v1/products?category_id=${categoryId}&page=${currentPage}&per_page=10`)
       .then((response) => {
-        console.log("API Response:", response.data); // ✅ API dan kelgan ma’lumotni tekshirish
+        console.log("API Response:", response.data);
         setProducts(response.data.data || []);
         setTotalPages(response.data.meta?.last_page || 1);
       })
@@ -23,7 +23,7 @@ const ProductPage = () => {
   }, [categoryId, currentPage]);
 
   return (
-    <div className="product-page">
+    <div className="container">
       <h2 className="title">Mahsulotlar</h2>
 
       {/* Pagination */}
@@ -31,7 +31,7 @@ const ProductPage = () => {
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
-            className={`page-number ${currentPage === index + 1 ? "active" : ""}`}
+            className={`page-btn ${currentPage === index + 1 ? "active" : ""}`}
             onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}
@@ -44,10 +44,14 @@ const ProductPage = () => {
       ) : (
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.id} className="product-card" onClick={() => setSelectedProduct(product)}>
-              <img src={product.photo} alt={product.name?.uz} className="product-image" /> {/* ✅ Rasm qo'shildi */}
-              <h3>{product.name || ""}</h3> {/* ✅ To‘g‘ri nom */}
-              <p>Narx: {product.price ? `${product.price} so'm` : ""}</p> {/* ✅ To‘g‘ri narx */}
+            <div
+              key={product.id}
+              className="product-card"
+              onClick={() => setSelectedProduct(product)}
+            >
+              <img src={product.photo} alt={product.name} className="product-img" />
+              <h3 className="product-name">{product.name}</h3>
+              <p className="product-price">Narx: {product.price} som</p>
             </div>
           ))}
         </div>
@@ -55,12 +59,14 @@ const ProductPage = () => {
 
       {/* Modal oyna */}
       {selectedProduct && (
-        <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{selectedProduct.name || ""}</h2>
-            <img src={selectedProduct.photo} alt={selectedProduct.name?.uz} className="modal-image" />
-            <p>Narx: {selectedProduct.price ? `${selectedProduct.price} so'm` : ""}</p>
-            <button className="close-button" onClick={() => setSelectedProduct(null)}>✖</button>
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-btn" onClick={() => setSelectedProduct(null)}>
+              ✖
+            </button>
+            <h2 className="modal-title">{selectedProduct.name}</h2>
+            <img src={selectedProduct.photo} alt={selectedProduct.name} className="modal-img" />
+            <p className="modal-price">Narx: {selectedProduct.price} som</p>
           </div>
         </div>
       )}
