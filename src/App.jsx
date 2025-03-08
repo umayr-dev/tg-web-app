@@ -1,10 +1,16 @@
-import axios from "axios";
+import { BrowserRouter as Router, Routes, Route, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
 import "./index.css";
+import ProductPage from "./page/ProductPage";
 
-const CategoryCard = ({ category, size }) => {
+// 📌 Kategoriya kartochkasi
+const CategoryCard = ({ category, size, onClick }) => {
   return (
-    <div className={`category-card ${size} ${category.special ? "special" : ""}`}>
+    <div
+      className={`category-card ${size} ${category.special ? "special" : ""}`}
+      onClick={() => onClick(category.id)}
+    >
       {category.photo && (
         <div className="logo-container">
           <img src={category.photo} alt={`${category.name} logo`} />
@@ -16,11 +22,12 @@ const CategoryCard = ({ category, size }) => {
   );
 };
 
+// 📌 Kategoriya grid (kategoriya bosilganda mahsulot sahifasiga yo‘naltiradi)
 const CategoryGrid = () => {
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // axios.get("")
     axios.get("https://kroff-api.eduflow.uz/api/v1/categories")
       .then(response => {
         setCategories(response.data);
@@ -53,18 +60,62 @@ const CategoryGrid = () => {
   return (
     <div className="category-grid">
       {arrangedCategories.map((category) => (
-        <CategoryCard key={category.id} category={category} size={category.size} />
+        <CategoryCard
+          key={category.id}
+          category={category}
+          size={category.size}
+          onClick={(id) => navigate(`/products/${id}`)}
+        />
       ))}
     </div>
   );
 };
 
+// 📌 Mahsulotlar ro‘yxati
+const ProductList = () => {
+  const { categoryId } = useParams();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios.get(`https://kroff-api.eduflow.uz/api/v1/products?category_id=${categoryId}`)
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error("Mahsulotlarni yuklashda xatolik:", error);
+      });
+      console.log(Response.data)
+  }, [categoryId]);
+
+  return (
+    <div className="product-list">
+      <h2>Mahsulotlar</h2>
+      {products.length > 0 ? (
+        products.map(product => (
+          <div key={product.id} className="product-card">
+            <h3>{product.name}</h3>
+            <p>{product.description}</p>
+          </div>
+        ))
+      ) : (
+        <p>Mahsulotlar topilmadi.</p>
+      )}
+    </div>
+  );
+};
+
+// 📌 Bosh sahifa va marshrutlarni boshqarish
 const App = () => {
   return (
-    <div className="container">
-      <h1>Mahsulotlar kategoriyasi</h1>
-      <CategoryGrid />
-    </div>
+    <Router>
+      <div className="container">
+        <h1>Mahsulotlar kategoriyasi</h1>
+        <Routes>
+          <Route path="/" element={<CategoryGrid />} />
+          <Route path="/products/:categoryId" element={<ProductPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
