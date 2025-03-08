@@ -5,13 +5,13 @@ import "./index.css";
 const CategoryCard = ({ category, size }) => {
   return (
     <div className={`category-card ${size} ${category.special ? "special" : ""}`}>
-      {category.logo && (
+      {category.photo && (
         <div className="logo-container">
-          <img src={category.logo} alt={`${category.name} logo`} />
+          <img src={category.photo} alt={`${category.name} logo`} />
         </div>
       )}
       <div className="category-name">{category.name}</div>
-      <div className="category-count">{category.count}</div>
+      <div className="category-count">{category.product_count}</div>
     </div>
   );
 };
